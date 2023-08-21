@@ -73,8 +73,14 @@ const TourStepNoHeaderFooter = styled(EuiTourStep)`
   }
 `;
 
-const InactiveAgentsTourStep: React.FC<{ isOpen: boolean }> = ({ children, isOpen }) => (
+const InactiveAgentsTourStep: React.FC<{ isOpen: boolean }> = ({ children, isOpen }) => {
+  const { euiTheme } = useEuiTheme();
+
+  const flyOutZIndex = euiTheme.levels.flyout as number;
+
+  return (
   <TourStepNoHeaderFooter
+    zIndex={flyOutZIndex - 1}
     content={
       <EuiText size="s">
         <FormattedMessage
@@ -95,6 +101,7 @@ const InactiveAgentsTourStep: React.FC<{ isOpen: boolean }> = ({ children, isOpe
     {children as React.ReactElement}
   </TourStepNoHeaderFooter>
 );
+  }
 
 export const AgentStatusFilter: React.FC<{
   selectedStatus: string[];
