@@ -6,7 +6,13 @@ source .buildkite/scripts/common/util.sh
 
 is_test_execution_step
 
-.buildkite/scripts/bootstrap.sh
+if [ "$BUILDKITE_PIPELINE_SLUG" == "kibana-performance-data-set-extraction" ]; then
+  .buildkite/scripts/bootstrap.sh
+else
+  # bare metal static worker
+  rm -rf node_modules
+  yarn kbn bootstrap --force-install
+fi
 
 # These tests are running on static workers so we have to make sure we delete previous build of Kibana
 rm -rf "$KIBANA_BUILD_LOCATION"
