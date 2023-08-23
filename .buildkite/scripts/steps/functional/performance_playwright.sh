@@ -24,6 +24,7 @@ else
   do
     echo "--- Running $i iteration"
     node scripts/run_performance.js --journey-path x-pack/performance/journeys/tags_listing_page.ts --kibana-install-dir "$KIBANA_BUILD_LOCATION"
+    sleep 120
   done
 
 fi
