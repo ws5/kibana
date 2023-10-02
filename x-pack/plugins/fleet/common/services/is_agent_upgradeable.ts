@@ -33,9 +33,7 @@ export function isAgentUpgradeable(
     return false;
   }
   if (versionToUpgrade !== undefined) {
-    return (
-      isNotDowngrade(agentVersion, versionToUpgrade)
-    );
+    return isNotDowngrade(agentVersion, versionToUpgrade);
   }
   return isAgentVersionLessThanLatest(agentVersion, latestAgentVersion);
 }
