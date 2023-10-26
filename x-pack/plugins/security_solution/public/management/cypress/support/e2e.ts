@@ -151,7 +151,8 @@ Cypress.Commands.add('createEndpointHost', () =>
 
 Cypress.Commands.add('removeEndpointHost', () => {
   cy.getCreatedHostData().then((endpointHost) => {
-    if (endpointHost) {
+    // Don't remove the host if we are in interactive mode
+    if (endpointHost && !Cypress.config('isInteractive')) {
       if (endpointHost.createdHost) {
         cy.task('destroyEndpointHost', endpointHost.createdHost);
       }
