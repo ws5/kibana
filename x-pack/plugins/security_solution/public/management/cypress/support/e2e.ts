@@ -128,23 +128,14 @@ Cypress.Commands.add('createEndpointHost', () => {
     .then((endpointHostData) =>
       cy.dataSession({
         name: ENDPOINT_AGENT_SESSION_NAME,
-        onInvalidated: (value) => {
-          console.error('value', value);
-
-          return cy.task('unEnrollFleetAgent', value.createdHost.agentId);
-        },
         setup: () => {
-          let indexedPolicy: IndexedFleetEndpointPolicyResponse;
           let policy: PolicyData;
-          let createdHost: CreateAndEnrollEndpointHostResponse;
 
           return getEndpointIntegrationVersion().then((version) =>
-            createAgentPolicyTask(version).then((data) => {
-              indexedPolicy = data;
+            createAgentPolicyTask(version).then((indexedPolicy) => {
               policy = indexedPolicy.integrationPolicies[0];
 
               return enableAllPolicyProtections(policy.id).then(() => {
-                // Create and enroll a new Endpoint host
                 return cy
                   .task(
                     'enrollHostWithFleet',

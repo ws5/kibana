@@ -224,6 +224,12 @@ declare global {
         arg: IsAgentAndEndpointUninstalledFromHostTaskOptions,
         options?: Partial<Loggable & Timeoutable>
       ): Chainable<boolean>;
+
+      task(
+        name: 'enrollHostWithFleet',
+        arg: EnrollHostWithFleetTaskOptions,
+        options?: Partial<Loggable & Timeoutable>
+      ): Chainable<{ agentId: string }>;
     }
   }
 }

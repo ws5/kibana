@@ -294,6 +294,12 @@ export const dataLoaders = (
   });
 };
 
+interface EnrollHostWithFleetTaskOptions {
+  agentPolicyId: string;
+  hostname: string;
+  vmDirName: string;
+}
+
 export const dataLoadersForRealEndpoints = (
   on: Cypress.PluginEvents,
   config: Cypress.PluginConfigOptions
@@ -387,11 +393,7 @@ export const dataLoadersForRealEndpoints = (
       });
     },
 
-    enrollHostWithFleet: async (options: {
-      agentPolicyId: string;
-      hostname: string;
-      vmDirName: string;
-    }) => {
+    enrollHostWithFleet: async (options: EnrollHostWithFleetTaskOptions) => {
       const { kbnClient, log } = await stackServicesPromise;
       const [fleetServerUrl, enrollmentToken] = await Promise.all([
         fetchFleetServerUrl(kbnClient),
