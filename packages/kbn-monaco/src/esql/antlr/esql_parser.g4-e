@@ -17,7 +17,7 @@
 
 parser grammar esql_parser;
 
-options {tokenVocab=esql_lexer;}
+options {tokenVocab=EsqlBaseLexer;}
 
 singleStatement
     : query EOF

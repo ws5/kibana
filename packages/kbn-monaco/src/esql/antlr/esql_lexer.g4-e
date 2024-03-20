@@ -8,7 +8,7 @@
 // DO NOT MODIFY THIS FILE BY HAND. IT IS MANAGED BY A CI JOB.
 
 lexer grammar esql_lexer;
-  options { caseInsensitive = true; }
+
 DISSECT : 'dissect'           -> pushMode(EXPRESSION_MODE);
 DROP : 'drop'                 -> pushMode(PROJECT_MODE);
 ENRICH : 'enrich'             -> pushMode(ENRICH_MODE);
