@@ -69,13 +69,13 @@ main () {
   synchronize_parser_grammar "$license_header"
 
   # Check for differences
-  set +e
-  git diff --exit-code --quiet "$destination_file"
-  if [ $? -eq 0 ]; then
-    echo "No differences found. Our work is done here."
-    exit
-  fi
-  set -e
+#  set +e
+#  git diff --exit-code --quiet "$destination_file"
+#  if [ $? -eq 0 ]; then
+#    echo "No differences found. Our work is done here."
+#    exit
+#  fi
+#  set -e
 
   report_main_step "Differences found. Checking for an existing pull request."
 
@@ -89,12 +89,12 @@ main () {
   # Check if a PR already exists
   pr_search_result=$(gh pr list --search "$PR_TITLE" --state open --author "$KIBANA_MACHINE_USERNAME"  --limit 1 --json title -q ".[].title")
 
-  if [ "$pr_search_result" == "$PR_TITLE" ]; then
-    echo "PR already exists. Exiting."
-    exit
-  fi
-
-  echo "No existing PR found. Proceeding."
+#  if [ "$pr_search_result" == "$PR_TITLE" ]; then
+#    echo "PR already exists. Exiting."
+#    exit
+#  fi
+#
+#  echo "No existing PR found. Proceeding."
 
   report_main_step "Building ANTLR artifacts."
 
@@ -106,11 +106,12 @@ main () {
   yarn build:antlr4:esql
 
   # Make a commit
-  BRANCH_NAME="esql_grammar_sync_$(date +%s)"
+  BRANCH_NAME="test_esql_grammar_sync_$(date +%s)"
 
   git checkout -b "$BRANCH_NAME"
 
   git add antlr/*
+  echo hello > potato.txt && git add potato.txt
   git commit -m "Update ES|QL grammars"
 
   report_main_step "Changes committed. Creating pull request."
@@ -118,7 +119,7 @@ main () {
   git push origin "$BRANCH_NAME"
 
   # Create a PR
-  gh pr create --title "$PR_TITLE" --body "$PR_BODY" --base main --head "${BRANCH_NAME}" --label 'release_note:skip' --label 'Team:ESQL' 
+#  gh pr create --title "$PR_TITLE" --body "$PR_BODY" --base main --head "${BRANCH_NAME}" --label 'release_note:skip' --label 'Team:ESQL'
 }
 
 main
