@@ -8,12 +8,8 @@ import React from 'react';
 import { HttpSetup } from '@kbn/core-http-browser';
 import { AlertConsumers } from '@kbn/rule-data-utils';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { act, renderHook } from '@testing-library/react-hooks';
-import {
-  type UseAlertsHistory,
-  useAlertsHistory,
-  type Props as useAlertsHistoryProps,
-} from './use_alerts_history';
+import { waitFor, renderHook } from '@testing-library/react';
+import { useAlertsHistory } from './use_alerts_history';
 
 const queryClient = new QueryClient({
   logger: {
@@ -40,7 +36,7 @@ describe('useAlertsHistory', () => {
 
   it('returns no data with error when http client is not provided', async () => {
     const http = undefined;
-    const { result, waitFor } = renderHook<useAlertsHistoryProps, UseAlertsHistory>(
+    const { result } = renderHook(
       () =>
         useAlertsHistory({
           http,
@@ -52,10 +48,7 @@ describe('useAlertsHistory', () => {
         wrapper,
       }
     );
-    await act(async () => {
-      await waitFor(() => result.current.isError);
-    });
-    expect(result.current.isError).toBeTruthy();
+    await waitFor(() => expect(result.current.isError).toBeTruthy());
     expect(result.current.isSuccess).toBeFalsy();
     expect(result.current.isLoading).toBeFalsy();
   });
@@ -66,7 +59,7 @@ describe('useAlertsHistory', () => {
         throw new Error('ES error');
       }),
     } as unknown as HttpSetup;
-    const { result, waitFor } = renderHook<useAlertsHistoryProps, UseAlertsHistory>(
+    const { result } = renderHook(
       () =>
         useAlertsHistory({
           http,
@@ -78,10 +71,7 @@ describe('useAlertsHistory', () => {
         wrapper,
       }
     );
-    await act(async () => {
-      await waitFor(() => result.current.isError);
-    });
-    expect(result.current.isError).toBeTruthy();
+    await waitFor(() => expect(result.current.isError).toBeTruthy());
     expect(result.current.isSuccess).toBeFalsy();
     expect(result.current.isLoading).toBeFalsy();
   });
@@ -130,7 +120,7 @@ describe('useAlertsHistory', () => {
         },
       }),
     } as unknown as HttpSetup;
-    const { result, waitFor } = renderHook<useAlertsHistoryProps, UseAlertsHistory>(
+    const { result } = renderHook(
       () =>
         useAlertsHistory({
           http,
@@ -142,9 +132,7 @@ describe('useAlertsHistory', () => {
         wrapper,
       }
     );
-    await act(async () => {
-      await waitFor(() => result.current.isSuccess);
-    });
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
     expect(result.current.isLoading).toBeFalsy();
     expect(result.current.isError).toBeFalsy();
     expect(result.current.data.avgTimeToRecoverUS).toEqual(134959464.2857143);
@@ -170,7 +158,7 @@ describe('useAlertsHistory', () => {
       }),
     } as unknown as HttpSetup;
 
-    const { result, waitFor } = renderHook<useAlertsHistoryProps, UseAlertsHistory>(
+    const { result } = renderHook(
       () =>
         useAlertsHistory({
           http,
@@ -183,10 +171,7 @@ describe('useAlertsHistory', () => {
         wrapper,
       }
     );
-
-    await act(async () => {
-      await waitFor(() => result.current.isSuccess);
-    });
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
     expect(mockedHttpPost).toBeCalledWith('/internal/rac/alerts/find', {
       body:
         '{"size":0,"feature_ids":["apm"],"query":{"bool":{"must":[' +
@@ -219,7 +204,7 @@ describe('useAlertsHistory', () => {
       }),
     } as unknown as HttpSetup;
 
-    const { result, waitFor } = renderHook<useAlertsHistoryProps, UseAlertsHistory>(
+    const { result } = renderHook(
       () =>
         useAlertsHistory({
           http,
@@ -233,9 +218,7 @@ describe('useAlertsHistory', () => {
       }
     );
 
-    await act(async () => {
-      await waitFor(() => result.current.isSuccess);
-    });
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
     expect(mockedHttpPost).toBeCalledWith('/internal/rac/alerts/find', {
       body:
         '{"size":0,"feature_ids":["apm"],"query":{"bool":{"must":[' +
