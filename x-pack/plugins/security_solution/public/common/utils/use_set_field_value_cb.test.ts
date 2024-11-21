@@ -5,7 +5,7 @@
  * 2.0.
  */
 
-import { act, renderHook } from '@testing-library/react-hooks';
+import { renderHook, act } from '@testing-library/react';
 import { useSetFieldValueWithCallback } from './use_set_field_value_cb';
 
 const initialValue = 'initial value';
@@ -28,23 +28,21 @@ describe('set field value callback', () => {
     expect(callback).toHaveBeenCalled();
   });
   it('invokes the callback after value is set to equal value', () => {
-    const { result, rerender } = renderHook((props) => useSetFieldValueWithCallback(props), {
+    const { result } = renderHook((props) => useSetFieldValueWithCallback(props), {
       initialProps,
     });
     act(() => {
       result.current(initialValue, callback);
     });
-    rerender();
     expect(callback).toHaveBeenCalled();
   });
   it('does not invoke the callback if value does not update', () => {
-    const { result, rerender } = renderHook((props) => useSetFieldValueWithCallback(props), {
+    const { result } = renderHook((props) => useSetFieldValueWithCallback(props), {
       initialProps,
     });
     act(() => {
       result.current(newValue, callback);
     });
-    rerender();
     expect(callback).not.toHaveBeenCalled();
   });
 });
